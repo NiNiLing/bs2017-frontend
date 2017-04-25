@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<style>
+    .nav {
+        background: lightsalmon;
+        height: 50px;
+    }
+  
+    
+</style>
+
+<body>
+
+    <div class="nav">
+
+    </div>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="row">
+                <h2>Youbike</h2>
+            </div>
+
+            <div id="side" class="col-md-4">
+                停車地點:
+                <div id="wpark" class="btn-group-vertical btn-block">
+                </div>
+            </div>
+
+            <div id="wait" class="col-md-8 ">
+                詳細資訊:
+                <ul id="results" class="list-group">
+                    <!--<li class="list-group-item"></li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        // "http://buildschool-chu.azurewebsites.net/parking/areas"網址
+        $(function () {
+            var $wpark = $("#wpark"),
+                $results = $("#results");
+            //用ajax取得區域的資料
+            $.ajax({
+                type: "GET",
+                url: "http://buildschool-chu.azurewebsites.net/youbike/district",
+                data: null,
+                dataType: "jsonp",
+                success: function (result, status, xhr) {          
+                    $wpark.empty();
+                    $results.empty();
+                    //產生<a class="btn btn-default></a>然後帶入相關資料
+                    $(result).each(function (i, areaName) {
+                        $("<a></a>")
+                            .html("href", "#")
+                            .data("area", areaName)
+                            .text(areaName)
+                            .addClass("btn")
+                            .addClass("btn-default")
+                            .appendTo($wpark)
+                    });
+                }
+            });
+            //傾聽每個a
+            $wpark.on("click", "a.btn", function () {
+                //this就是會被點擊的對象
+                var $a = $(this),
+                    areaName = $a.data("area");
+
+                $a.addClass("btn-danger")
+                    .siblings("a.btn-danger")
+                    .removeClass("btn-danger");
+
+                    
+                $results.empty();
+
+                //用ajax取得停車場資訊
+                $.ajax({
+                    type: "GET",
+                    data: {"area": areaName},
+                    url: "http://buildschool-chu.azurewebsites.net/youbike/index?district="+areaName,
+                    dataType: "jsonp",
+                    success: function (result, status, xhr) {
+                        $(result).each(function (i, item) {
+                           
+                            //顯示停車場的資料
+                            $("<div></div>")
+                                .addClass("col-md-5 ")
+                                .html("<div id=\"hi\" class=\"panel panel-danger\">" +
+                                    "<div class=\"panel-heading\">" +
+                                    "<h3 class=\"panel-title\">" + item.sna +"</h3>" +
+                                    "</div>" +
+                                    "<div class=\"panel-body\">" +
+                                    "<p>" + item.ar + "</p>" +
+                                    "<p>" + item.aren + "</p>" +
+                                  
+                                    "  </div>" +
+                                    "</div>")
+                                .appendTo($results);
+                        });
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

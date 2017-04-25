@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<link rel="icon" href="../../favicon.ico">-->
+
+    <title>Guess number</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--<link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--<script src="../../assets/js/ie-emulation-modes-warning.js"></script>-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+</style>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search...">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Export</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item</a></li>
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                    <li><a href="">More navigation</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h2>累進稅率</h2>
+                <div class="input-group">
+                    <input id="howmoney" type="text" name="" class="form-control" value="" required="required">
+                    <span class="input-group-btn">
+                    <a id="guess" type="button" class="btn btn-info" onclick="money()" >計算稅額</a>
+                  </span>
+                </div>
+                <br>
+                <ul id="hmoney" class="list-group">
+                    <li class="list-group-item">                   
+                         <span class="label label-danger">應繳金額</span>
+                        1234
+                    </li>
+
+                </ul>
+            </div>
+            <script>
+            </script>
+            <!-- Bootstrap core JavaScript
+    ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <!--<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
+            <script src="scripts/bootstrap.min.js"></script>
+            <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+            <!--<script src="../../assets/js/vendor/holder.min.js"></script>-->
+            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+            <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
+            <script>
+                document.getElementById("howmoney").value = "";
+                 var text =[  
+                 {min:0,max:540000,rate:.05}, 
+                 {min:540001,max:1210000,rate:.12},
+                 {min:1210001,max:2420000,rate:.2},
+                 {min:2420001,max:4530000,rate:.3},
+                 {min:4530001,max:10310000,rate:.4},
+                 {min:10310001,max:null,rate:.5},
+                ];
+            function money(){ 
+                 
+                var a=text[0].rate;
+                 var a1=text[1].rate;
+                 var a2=text[2].rate;
+                 var a3=text[3].rate;
+                 var a4=text[4].rate;
+                 var a5=text[5].rate;
+                 var hmoney = document.createElement("li");
+                howmoney = document.getElementById("howmoney").value;
+                if(howmoney>=text[0].min&&howmoney<=text[0].max){                    
+                    var x=parseInt(howmoney*a);
+                     hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                     
+                 }
+                else if(howmoney>=text[1].min&&howmoney<=text[1].max){                  
+                    var x=parseInt((text[0].max*a)+((howmoney-text[0].max)*a1));
+                    hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                }
+                else if(howmoney>=text[2].min&&howmoney<=text[2].max){                  
+                    var x=parseInt((text[0].max*a)+((text[1].max-text[0].max)*a1)+((howmoney-text[1].max)*a2));
+                    hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                }
+                else if(howmoney>=text[3].min&&howmoney<=text[3].max){                  
+                    var x=parseInt((text[0].max*a)+((text[1].max-text[0].max)*a1)+((text[2].max-text[1].max)*a2)+((howmoney-text[2].max)*a3));
+                 hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                }
+                else if(howmoney>=text[4].min&&howmoney<=text[4].max){                  
+                    var x=parseInt((text[0].max*a)+((text[1].max-text[0].max)*a1)+((text[2].max-text[1].max)*a2)+((text[3].max-text[2].max)*a3)+((howmoney-text[3].max)*a4));
+                hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                }
+                else if(howmoney>=text[5].min){                  
+                    var x=parseInt((text[0].max*a)+((text[1].max-text[0].max)*a1)+((text[2].max-text[1].max)*a2)+((text[3].max-text[2].max)*a3)+((text[4].max-text[3].max)*a4)+((howmoney-text[4].max)*a5));
+                 hmoney.className = "list-group-item";
+                     hmoney.innerHTML = "<span class=\"label label-danger\">應繳金額</span>"+ x;
+                     document.getElementById("hmoney").appendChild(hmoney);
+                }
+ 
+
+
+            }
+
+document.getElementById("howmoney").onkeyup=function(event){
+  if(event.keyCode ==13){
+    
+    money();
+  }
+    };
+            </script>
+</body>
+
+</html>

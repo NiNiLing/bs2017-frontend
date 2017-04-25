@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+</head>
+<script id="parkingLot-tmpl" type="text/x-jquery-tmpl">
+    <div class="col-md-5">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">${SiteName}</h3>
+            </div>
+            <div class="panel-body">
+                <p>PSI:${PSI}</p>
+                <p>MajorPollutant:${MajorPollutant}</p>
+                <p>Status:${Status}</p>
+                <p>SO2:${SO2}</p>
+                <p>CO:${CO}</p>
+                <p>PM10:${PM10}</p>
+                <p>NO2:${NO2}</p>
+                <p>WindSpeed:${WindSpeed}</p>
+                <p>WindDirec:${WindDirec}</p>
+                <p>NOx:${NOx}</p>
+                <p>NO:${NO}</p>
+                <p>PublishTime:${PublishTime}</p>
+                <p>PM2.5:${pm2_5}</p>
+
+
+            </div>
+        </div>
+    </div>
+</script>
+<style>
+    .nav {
+        background: lightskyblue;
+        height: 50px;
+    }
+</style>
+
+<body>
+
+    <div class="nav">
+
+    </div>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="row">
+                <h2>空氣汙染檢測</h2>
+            </div>
+
+            <div id="side" class="col-md-4">
+                檢測地點:
+                <div id="wtest" class="btn-group-vertical btn-block">
+                </div>
+            </div>
+
+            <div id="wait" class="col-md-8 ">
+                詳細資訊:
+                <ul id="howair" class="list-group">
+                    <!--<li class="list-group-item"></li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var $wtest = $("#wtest"),
+                $howair = $("#howair");
+            //取得檢測地區
+            $.ajax({
+                type: "GET",
+                data: null,
+                url: "http://opendata.epa.gov.tw/ws/Data/REWXQA/?$orderby=SiteName&$skip=0&$top=1000&format=json",
+                dataType: "jsonp",
+                success: function (result, status, xhr) {
+                    $wtest.empty();
+                    $howair.empty();
+                    $(result).each(function (i, item) {
+                        $("<a></a>")
+                            .text(item.County)
+                            .addClass("btn")
+                            .data("test", item)
+                            .addClass("btn-default")
+                            .appendTo($wtest)
+                    });
+                }
+            });
+            $wtest.on("click", "a.btn", function (i, item) {
+                  console.error("asd");
+                var $a = $(this);
+                var $data1 = $a.data("test")
+                $a.addClass("btn-primary")
+                    .siblings("a.btn-primary")
+                    .removeClass("btn-primary")
+                $howair.empty();
+                console.error($data1);
+$data1.pm2_5=$data1["PM2.5"];
+                $("#parkingLot-tmpl")
+                    .tmpl($data1)
+                    .appendTo($howair);
+
+
+                return false;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

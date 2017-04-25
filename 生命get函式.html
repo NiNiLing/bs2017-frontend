@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+
+
+</head>
+<style>
+    .nav {
+        background: pink;
+        height: 50px;
+    }
+    
+    #side {
+        background: lightgoldenrodyellow;
+    }
+</style>
+
+<body>
+    <div class="nav">
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <div id="side" class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
+            </div>
+
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 main">
+                <label>請選擇生日:</label>
+                <input type=date id="bookdata">
+                <a type="button" id="enter" class="btn btn-default">分析</a>
+                <ul id="go" class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("enter").onclick = function () {
+            var bir = document.getElementById("bookdata");
+            var y = new Date(bir.value).getFullYear().toString(); //年
+            var m = (new Date(bir.value).getMonth() + 1).toString();
+            var d = new Date(bir.value).getDate().toString();
+            var Today = new Date();
+            var allday = y + m + d;
+            birsum(allday);
+
+            function birsum(a) {
+                bsum = 0;
+                var arr = a.toString().split('');
+                for (var i = 0; i < arr.length; i++) {
+                    bsum += parseInt(arr[i]);
+                }
+                if (bsum > 9) {
+                    birsum(bsum);
+                }
+            }
+            var name = "";
+            //水瓶座
+            if (m == 1 && day >= 21 || m == 2 && d <= 20) {
+                var a = "水瓶座";
+                name = "aquarius";
+            }
+            //牡羊座
+            if (m == 3 && d >= 21 || m == 4 && d <= 20) {
+                name = "aries";
+                var a = "水瓶座";
+            }
+            //雙魚座
+            if (m == 2 && d >= 21 || m == 3 && d <= 20) {
+                name = "pisces";
+                var a = "雙魚座";
+            }
+            //巨蟹座
+            if (m == 6 && d >= 21 || m == 7 && d <= 20) {
+                name = "cancer";
+                var a = "巨蟹座";
+            }
+            //魔羯座
+            if (m == 12 && d >= 21 || m == 1 && d <= 20) {
+
+                name = "capricorn";
+                var a = "摩羯座";
+            }
+            //雙子座
+            if (m == 5 && d >= 21 || m == 6 && d <= 20) {
+                name = "gemini";
+                var a = "雙子座";
+            }
+            //獅子座
+            if (m == 5 && d >= 21 || m == 6 && d <= 20) {
+                name = "leo";
+                var a = "獅子座";
+            }
+            //天秤座
+            if (m == 9 && d >= 21 || m == 10 && d <= 20) {
+                name = "libra";
+                var a = "天秤座";
+            }
+            //射手座
+            if (m == 11 && d >= 21 || m == 12 && d <= 20) {
+                name = "sagittarius";
+                var a = "射手座";
+            }
+            //天蠍座
+            if (m == 10 && d >= 21 || m == 11 && d <= 20) {
+                name = "scorpio";
+                var a = "天蠍座";
+            }
+            //金牛座
+            if (m == 4 && d >= 21 || m == 5 && d <= 20) {
+                name = "taurus";
+                var a = "金牛座";
+            }
+            //處女座
+            if (m == 8 && d >= 21 || m == 9 && d <= 20) {
+                name = "virgo";
+                var a = "處女座";
+            }
+            var url =
+                "https://gist.githubusercontent.com/dinowang/5290d4cebf96a666c29ab0878afeb2f1/raw/9516581cb54154d070cf287ebd31d9bce217a495/" +
+                name + ".json";
+            $.get(url, null, function (result, status, xhr) {
+                var text = "生命靈數:<span class='label label-info'>" + bsum + "</span>" +
+                    "<span class='label label-danger'>" + a + "</span>" + result.lookup[bsum - 1];
+
+                $("<li></li>")
+                    .addClass("list-group-item")
+                    .html(text)
+                    .prependTo("#go");
+
+
+            }, "json")
+
+
+
+
+
+        }
+    </script>
+
+</body>
+
+</html>

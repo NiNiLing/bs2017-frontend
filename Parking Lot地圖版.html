@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" x-frame-options="sameorigin">
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/dashboard.css" rel="stylesheet">
+
+
+</head>
+<style>
+    .nav {
+        background: lightsalmon;
+        height: 50px;
+    }
+    
+    #markyou {
+        height: 50px;
+        width: 100px;
+    }
+    
+    #som {
+        height: 150px;
+        width: 150px;
+    }
+</style>
+
+<body>
+    <div class="container-header">
+        <div class="nav">
+
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="row">
+                <br>
+                <img id="markyou" src="images/park.png" alt="" Align="left">
+                <h2>Parking Lot</h2>
+                <h3
+                </div>>
+
+                    <div id="side" class="col-md-3">
+                        停車地點:
+                        <div id="wpark" class="btn-group-vertical btn-block">
+
+                        </div>
+                        <img id="som" src="images/1111.png" alt="" Align="right">
+                    </div>
+
+                    <div id="wait" class="col-md-9 ">
+                        詳細資訊:
+                        <ul id="results" class="list-group">
+                            <!--<li class="list-group-item"></li>-->
+                        </ul>
+                    </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script id=parkingLot-tmpl type="text/x-jquery-tmpl">
+            <div class="col-md-3 parkingLot">
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">${parkName}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="400" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src=http://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${wgsY},${wgsX}&z=13&output=embed&t=></iframe>
+                        </div>
+                        <p>${payGuide}</p>
+                        <a class="address" href="https://www.google.com.tw/maps/?q=${wgsY},${wgsX}" target="_blank">${address}</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </script>
+        <script>
+            // "http://buildschool-chu.azurewebsites.net/parking/areas"網址
+            $(function() {
+                var $wpark = $("#wpark"),
+                    $results = $("#results");
+                $.ajax({
+                    type: "GET",
+                    dataType: "jsonp",
+                    data: null,
+                    url: "http://buildschool-chu.azurewebsites.net/parking/areas",
+                    success: function(result, status, xhr) {
+
+                        $wpark.empty();
+                        $results.empty();
+                        $(result).each(function(i, item) {
+                            $("<a></a>")
+                                .addClass("btn")
+                                .addClass("btn-default")
+                                .text(item)
+                                .data("name", item)
+                                .attr("href", "#")
+                                .appendTo($wpark)
+
+
+                        });
+                    }
+                });
+                $wpark.on("click", "a.btn", function(event) {
+                    var $a = $(this),
+                        areaName = $a.data("name");
+                    $a.addClass("btn-danger")
+                        .siblings("a.btn-danger")
+                        .removeClass("btn-danger");
+                    $results.empty();
+                    $.ajax({
+                        type: "GET",
+                        url: "http://buildschool-chu.azurewebsites.net/parking/index",
+                        data: {
+                            "area": areaName
+                        },
+                        dataType: "jsonp",
+                        success: function(result, status, xhr) {
+                            $(result).each(function(i, item) {
+                                $("#parkingLot-tmpl")
+                                    .tmpl(item)
+                                    .data("json", item)
+                                    .appendTo($results);
+
+                            });
+                        }
+                    });
+                    return false;
+                });
+                $results.on("click", "a.address", function() {
+                    var $a = $(this),
+                        $parkingLot = $a.parents(".parkingLot"),
+                        parkingLot = $parkingLot.data("json");
+                    $("#parkingLotMap").remove();
+
+                    // 顯示地圖
+                    $("<iframe></iframe>")
+                        .attr("id", "parkingLotMap")
+                        .attr("width", "100%")
+                        .attr("height", 300)
+                        .attr("frameBorder", 0)
+                        .attr("src",
+                            "https://www.google.com/maps/embed/v1/place?key=AIzaSyBJADoRetu48862wwZAykrCrUmO3gOGI90&q=" +
+                            parkingLot.wgsY + "," + parkingLot.wgsX)
+                        .prependTo($results);
+
+                    return false;
+                });
+            });
+        </script>
+
+</body>
+
+</html>
